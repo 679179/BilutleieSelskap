@@ -52,7 +52,7 @@ public class Bil {
 		this.gruppe = gruppe;
 	}
 
-	public boolean isLedig() {
+	public boolean getLedig() {
 		return ledig;
 	}
 

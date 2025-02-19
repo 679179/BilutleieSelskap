@@ -1,5 +1,6 @@
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class BilutleieSelskap {
 
@@ -23,6 +24,8 @@ public class BilutleieSelskap {
 		
 		System.out.println(kunde1.toString() + "\n" + kontor1.toString() + "\n" + bil1.toString() + utlaan1.toString());
 		
+		
+		
 	}
 	
 	public BilutleieSelskap() {
@@ -32,6 +35,18 @@ public class BilutleieSelskap {
 		this.navn = navn;
 		this.firmaAdresse = firmaAdresse;
 		this.tlfNmr = tlfNmr;
+	}
+	
+	public List<Bil> sokeLedigBil(String s) {
+		
+		List<Bil> ledigeBiler = 
+		ledigeBiler.stream().filter(Bil.getLedig() == true).toList();
+		
+		if(Bil.getLedig() == true) {
+			
+		}
+		
+		return ;
 	}
 	
 	public static LocalDateTime getLocalTime() {

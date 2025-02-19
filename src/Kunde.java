@@ -13,7 +13,7 @@ public class Kunde {
 		this.adresse = adresse;
 		this.tlfNmr = tlfNmr;
 	}
-
+	
 	public String getNavn() {
 		return navn;
 	}
