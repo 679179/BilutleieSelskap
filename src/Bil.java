@@ -6,16 +6,18 @@ public class Bil {
 	private Colour farge;
 	private Utleiegruppe gruppe;
 	private boolean ledig;
+	private Kontor utleiekontor;
 	
 	public Bil() {
 	}
 	
-	public Bil(String registreringsNmr, String modell, Colour farge, Utleiegruppe gruppe, boolean ledig) {
+	public Bil(String registreringsNmr, String modell, Colour farge, Utleiegruppe gruppe, boolean ledig, Kontor utleiekontor) {
 		this.registreringsNmr = registreringsNmr;
 		this.modell = modell;
 		this.farge = farge;
 		this.gruppe = gruppe;
 		this.ledig = ledig;
+		this.utleiekontor = utleiekontor;
 	}
 
 	
@@ -50,6 +52,14 @@ public class Bil {
 
 	public void setGruppe(Utleiegruppe gruppe) {
 		this.gruppe = gruppe;
+	}
+	
+	public Kontor getUtleiekontor() {
+		return utleiekontor;
+	}
+
+	public void setUtleiekontor(Kontor utleiekontor) {
+		this.utleiekontor = utleiekontor;
 	}
 
 	public boolean getLedig() {

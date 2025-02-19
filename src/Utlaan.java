@@ -5,18 +5,22 @@ public class Utlaan {
 	private LocalDateTime tidspunktLeige;
 	private String kredittkort;
 	private String registreringsNmr;
-	private int kilometerstand;
 	private LocalDateTime tidspunktRetur;
+	private Kunde kunde;
+	private Kontor kontor;
+	private Bil bil;
 	
 	public Utlaan() {
 	}
 	
-	public Utlaan(LocalDateTime tidspunktLeige, String kredittkort, String registreringsNmr, int kilometerstand, LocalDateTime tidspunktRetur) {
+	public Utlaan(LocalDateTime tidspunktLeige, String kredittkort, String registreringsNmr, LocalDateTime tidspunktRetur, Kunde kunde, Bil bil, Kontor kontor) {
 		this.tidspunktLeige = tidspunktLeige;
 		this.kredittkort = kredittkort;
 		this.registreringsNmr = registreringsNmr;
-		this.kilometerstand = kilometerstand;
 		this.tidspunktRetur = tidspunktRetur;
+		this.kunde = kunde;
+		this.bil = bil;
+		this.kontor = kontor;
 	}
 
 	public LocalDateTime getTidspunktLeige() {
@@ -42,14 +46,6 @@ public class Utlaan {
 	public void setRegistreringsNmr(String registreringsNmr) {
 		this.registreringsNmr = registreringsNmr;
 	}
-	
-	public int getKilometerstand() {
-		return kilometerstand;
-	}
-	
-	public void setKilometerstand(int kilometerstand) {
-		this.kilometerstand = kilometerstand;
-	}
 
 	public LocalDateTime getTidspunktRetur() {
 		return tidspunktRetur;
@@ -59,10 +55,34 @@ public class Utlaan {
 		this.tidspunktRetur = tidspunktRetur;
 	}
 
+	public Kunde getKunde() {
+		return kunde;
+	}
+
+	public void setKunde(Kunde kunde) {
+		this.kunde = kunde;
+	}
+
+	public Bil getBil() {
+		return bil;
+	}
+
+	public void setBil(Bil bil) {
+		this.bil = bil;
+	}
+	
+	public Kontor getUtleiekontor() {
+		return kontor;
+	}
+
+	public void setUtleiekontor(Kontor kontor) {
+		this.kontor = kontor;
+	}
+
 	@Override
 	public String toString() {
 		return "[" + tidspunktLeige + ", " + kredittkort + ", "
-				+ registreringsNmr + ", " + kilometerstand + ", " + tidspunktRetur + "]";
+				+ registreringsNmr + ", " + tidspunktRetur + "]";
 	}
 	
 }
