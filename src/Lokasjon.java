@@ -1,0 +1,4 @@
+
+public enum Lokasjon {
+	OSLO, FORDE, BERGEN, TRONDHEIM, KRISTIANSAND
+}

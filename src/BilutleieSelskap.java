@@ -13,61 +13,146 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.util.Random;
+import java.time.temporal.ChronoUnit;
 
 public class BilutleieSelskap {
 
-	private String navn;
-	private Adresse firmaAdresse;
-	private String tlfNmr;
-	private static List<Bil> biler;
-	private static List<Utlaan> utlaan;
-	private static List<UtleieKontor> utleiekontor;
+	private static String navn;
+	private static Adresse firmaAdresse;
+	private static String tlfNmr;
+	private static List<Utleiekontor> utleiekontorer;
+	private static List<Kunde> kunder;
 	
 	
 	public static void main(String[] args) {
-		boolean kjorProgram = true;
-		biler = new ArrayList<Bil>();
-		utlaan = new ArrayList<Utlaan>();
+		utleiekontorer = new ArrayList<Utleiekontor>();
+		kunder = new ArrayList<Kunde>();
+		addGeneratedKontorer();
+		addGeneratedCarsToKontorer();
+		addGeneratedReservations();
 		
-		addGeneratedCars();
-
-
-	        // ÅPNE GUI/TERMINAL (scanner eller javafx) 
-			// VELG OM ER KUNDE ELLER KONSULENT (scanner velg 1,2,3 for hhv. kunde, konsulent, admin)
-		while(kjorProgram) {
-			
-    String velgBruker = showInputDialog("Velg brukersystem | 1 for Kunde | 2 for Konsulent | 3 for Admin | 4 for å stenge program");
-	switch(velgBruker) {
-	case "1":
-		searchAndReserveCar();
-		break;
-	case "2":
-		konsulentProgram();
-		break;
-	case "3":
-		adminProgram();
-		break;
-	case "4":
-		kjorProgram = false;
-		break;
-	default:
-		System.out.println("Du må skrive 1 for Kunde 2 for Konsulent eller 3 for Admin");	
-	}	
-			
+		for(Utleiekontor kontor: utleiekontorer) {
+			System.out.println(kontor);
 		}
+		// startApp();		
+	}
+	
+	public static void addGeneratedKontorer() {
+	    utleiekontorer.add(new Utleiekontor(Lokasjon.FORDE, 1, new Adresse("Hafstadvegen 23", "6800", "Førde"), "12345678"));
+	    utleiekontorer.add(new Utleiekontor(Lokasjon.OSLO, 2, new Adresse("Karl Johans gate 15", "0154", "Oslo"), "23456789"));
+	    utleiekontorer.add(new Utleiekontor(Lokasjon.TRONDHEIM, 3, new Adresse("Munkegata 34", "7011", "Trondheim"), "34567890"));
+	    utleiekontorer.add(new Utleiekontor(Lokasjon.BERGEN, 4, new Adresse("Bryggen 47", "5003", "Bergen"), "45678901"));
+	    utleiekontorer.add(new Utleiekontor(Lokasjon.KRISTIANSAND, 5, new Adresse("Markens gate 35", "4612", "Kristiansand"), "56789012"));
+	}
+	
+	public static void addGeneratedCarsToKontorer() {
+	    Bil[] biler = {
+	            new Bil("AB1234", null, "Toyota", "Corolla", Color.RED, BilKategori.LITEN, false, 50000),
+	            new Bil("CD5678", null, "BMW", "i3", Color.BLUE, BilKategori.MELLOMSTOR, false, 75000),
+	            new Bil("EF9012", null, "Tesla", "Model S", Color.BLACK, BilKategori.STASJONSVOGN, false, 20000),
+	            new Bil("GH3456", null, "Volkswagen", "Golf", Color.SILVER, BilKategori.LITEN, false, 60000),
+	            new Bil("IJ7890", null, "Ford", "Focus", Color.GRAY, BilKategori.MELLOMSTOR, false, 85000),
+	            
+	            new Bil("KL1234", null, "Nissan", "Altima", Color.WHITE, BilKategori.STOR, false, 30000),
+	            new Bil("MN5678", null, "Hyundai", "Santa Fe", Color.BLACK, BilKategori.STASJONSVOGN, false, 45000),
+	            new Bil("OP9012", null, "Audi", "A4", Color.BLUE, BilKategori.MELLOMSTOR, false, 40000),
+	            new Bil("QR3456", null, "Mazda", "CX-5", Color.RED, BilKategori.STOR, false, 52000),
+	            new Bil("ST7890", null, "Chevrolet", "Impala", Color.SILVER, BilKategori.STOR, false, 90000),
+	            
+	            new Bil("UV1234", null, "Honda", "Civic", Color.GREEN, BilKategori.LITEN, false, 15000),
+	            new Bil("WX5678", null, "Mercedes", "C-Class", Color.ORANGE, BilKategori.STASJONSVOGN, false, 7000),
+	            new Bil("YZ9012", null, "Kia", "Sorento", Color.PURPLE, BilKategori.STASJONSVOGN, false, 22000),
+	            new Bil("AB3456", null, "Subaru", "Outback", Color.GRAY, BilKategori.MELLOMSTOR, false, 67000),
+	            new Bil("CD7890", null, "Jeep", "Cherokee", Color.YELLOW, BilKategori.LITEN, false, 49000),
+	            
+	            new Bil("EF1234", null, "Volvo", "XC90", Color.RED, BilKategori.MELLOMSTOR, false, 34000),
+	            new Bil("GH5678", null, "Jaguar", "XE", Color.BLUE, BilKategori.STASJONSVOGN, false, 56000),
+	            new Bil("IJ9012", null, "Lexus", "RX", Color.BLACK, BilKategori.MELLOMSTOR, false, 29000),
+	            new Bil("KL3456", null, "Porsche", "Macan", Color.SILVER, BilKategori.STASJONSVOGN, false, 47000),
+	            new Bil("MN7890", null, "Land Rover", "Range Rover", Color.GRAY, BilKategori.STASJONSVOGN, false, 110000)
+	        };
+		    
+        for (int i = 0; i < biler.length; i++) {
+        	int kontorIndex = i % 5;
+            biler[i].setUtleieKontor(utleiekontorer.get(kontorIndex));
+            utleiekontorer.get(kontorIndex).addBil(biler[i]);
+        }
+	}
+	
+	public static void addGeneratedReservations() {
 		
+        Random random = new Random();
+    
+        String[] fornavn = {"Ola", "Kari", "Per", "Lise", "Anna"};
+        String[] etternavn = {"Nordmann", "Hansen", "Johansen", "Olsen", "Larsen"};
+        String[] gateadresser = {"Hovedgata 10", "Bekkveien 3", "Fjellveien 15", "Strandgata 22", "Parkveien 5"};
+        String[] poststeder = {"Oslo", "Bergen", "Trondheim", "Førde", "Kristiansand"};
+        String[] postnummer = {"0101", "5000", "7000", "6800", "4612"};
+        
+        for (int i = 0; i < utleiekontorer.size(); i++) {
+            // Generer en tilfeldig kunde
+            String fnavn = fornavn[random.nextInt(fornavn.length)];
+            String enavn = etternavn[random.nextInt(etternavn.length)];
+            String gateadresse = gateadresser[random.nextInt(gateadresser.length)];
+            String poststed = poststeder[random.nextInt(poststeder.length)];
+            String postNr = postnummer[random.nextInt(postnummer.length)];
+            Adresse adresse = new Adresse(gateadresse, postNr, poststed);
+            Kunde kunde = new Kunde(fnavn, enavn, adresse, "12345678"); // Telefonnummer som placeholder
+            kunder.add(kunde);
 
+            // Generer tilfeldige hentetidspunkt og returpunkt (± 2 uker)
+            LocalDateTime datoHent = LocalDateTime.now().minusDays(random.nextInt(14) + 1);
+            LocalDateTime datoRetur = datoHent.plusDays(random.nextInt(14) + 1);
+            
+            // Velg tilfeldige kontorer for henting og retur
+            Utleiekontor kontorHent = utleiekontorer.get(i % utleiekontorer.size());
+            Utleiekontor kontorRetur = utleiekontorer.get(random.nextInt(utleiekontorer.size()));
+
+            // Velg en tilfeldig bil fra kontoret
+            Bil bil = kontorHent.getBiler().get(random.nextInt(kontorHent.getBiler().size()));
+
+            // Beregn pris (f.eks. dagspris + gebyr mellom kontorer)
+            int dager = (int) ChronoUnit.DAYS.between(datoHent, datoRetur);
+            double dagspris = PrisKonfigurasjon.getDagspris(bil.getBilKategori());
+            double totalPris = dager * dagspris;
+            
+            // Opprett reservasjonen
+            Reservasjon reservasjon = new Reservasjon(totalPris, bil, kunde, kontorHent, kontorRetur, datoHent, datoRetur);
+
+            // Legg til reservasjonen
+            kontorHent.addReservasjon(reservasjon);
+        }
 		
 	}
 	
-	public BilutleieSelskap() {
-	}
+	/*
 	
-	public BilutleieSelskap(String navn, Adresse firmaAdresse, String tlfNmr) {
-		this.navn = navn;
-		this.firmaAdresse = firmaAdresse;
-		this.tlfNmr = tlfNmr;
+	
+	public static void startApp() {
+		boolean kjorProgram = true;
+		while(kjorProgram) {
+		    String velgBruker = showInputDialog("Velg brukersystem | 1 for Kunde | 2 for Konsulent | 3 for Admin | 4 for å stenge program");
+			switch(velgBruker) {
+			case "1":
+				searchAndReserveCar();
+				break;
+			case "2":
+				konsulentProgram();
+				break;
+			case "3":
+				adminProgram();
+				break;
+			case "4":
+				kjorProgram = false;
+				break;
+			default:
+				System.out.println("Du må skrive ned tallet 1,2,3 eller 4 så trykke enter");	
+			}	
+				
+		}
 	}
+
 	
 	public static void konsulentProgram() {
 		String velgFunskjon = showInputDialog("Velg funskjon | 1 for å leige bil | 2 for å returnere bil");
@@ -85,10 +170,11 @@ public class BilutleieSelskap {
 	}
 	
 	public static void returnereBil(String regNmr) {
-		List<Bil> bil = biler.stream().filter(x -> x.getRegistreringsNmr().equals(regNmr) && x.getLedig() == false).toList();
+		List<Bil> bil = getAllCars().stream().filter(x -> x.getRegistreringsNmr().equals(regNmr) && x.getLedig() == false).toList();
 		Bil funnetBil = bil.get(0);
 		funnetBil.setLedig(true);
 		LocalDateTime dato = LocalDateTime.now();
+		// TODO  når bil leveres --> må levers til utleiekontor, utleiekontor i listen må ha liste over biler 
 		
 		String kilometer = showInputDialog("Skriv inn kilometerstand på bilen");
 		Integer.parseInt(kilometer);
@@ -108,29 +194,7 @@ public class BilutleieSelskap {
 			break;
 		}
 	}
-	
-	public static void addGeneratedCars() {
-        biler.add(new Bil("EL902018", "VW", Colour.BLACK, Utleiegruppe.B, true, Kontor.FORDE));
-        biler.add(new Bil("AB123456", "Toyota", Colour.BLUE, Utleiegruppe.A, false, Kontor.OSLO));
-        biler.add(new Bil("CD789012", "BMW", Colour.RED, Utleiegruppe.C, true, Kontor.TRONDHEIM));
-        biler.add(new Bil("EF345678", "Audi", Colour.WHITE, Utleiegruppe.D, false, Kontor.FORDE));
-        biler.add(new Bil("GH901234", "Mercedes", Colour.SILVER, Utleiegruppe.B, true, Kontor.OSLO));
-        biler.add(new Bil("IJ567890", "Ford", Colour.BLACK, Utleiegruppe.B, true, Kontor.TRONDHEIM));
-        biler.add(new Bil("KL123987", "Tesla", Colour.WHITE, Utleiegruppe.C, false, Kontor.FORDE));
-        biler.add(new Bil("MN345678", "Volvo", Colour.GRAY, Utleiegruppe.A, true, Kontor.OSLO));
-        biler.add(new Bil("OP901234", "Honda", Colour.BLUE, Utleiegruppe.D, false, Kontor.TRONDHEIM));
-        biler.add(new Bil("QR567890", "Mazda", Colour.RED, Utleiegruppe.A, true, Kontor.FORDE));
-        biler.add(new Bil("ST123456", "Nissan", Colour.SILVER, Utleiegruppe.B, false, Kontor.OSLO));
-        biler.add(new Bil("UV789012", "Hyundai", Colour.BLACK, Utleiegruppe.C, true, Kontor.TRONDHEIM));
-        biler.add(new Bil("WX345678", "Peugeot", Colour.WHITE, Utleiegruppe.A, false, Kontor.FORDE));
-        biler.add(new Bil("YZ901234", "Kia", Colour.GRAY, Utleiegruppe.D, true, Kontor.OSLO));
-        biler.add(new Bil("AC567890", "Renault", Colour.BLUE, Utleiegruppe.D, false, Kontor.TRONDHEIM));
-        biler.add(new Bil("BD123456", "Subaru", Colour.RED, Utleiegruppe.B, true, Kontor.FORDE));
-        biler.add(new Bil("CE789012", "Fiat", Colour.SILVER, Utleiegruppe.C, false, Kontor.OSLO));
-        biler.add(new Bil("DF345678", "Citroen", Colour.BLACK, Utleiegruppe.A, true, Kontor.TRONDHEIM));
-        biler.add(new Bil("EG901234", "Jaguar", Colour.WHITE, Utleiegruppe.D, false, Kontor.FORDE));
-        biler.add(new Bil("FH567890", "Lexus", Colour.GRAY, Utleiegruppe.A, true, Kontor.OSLO));
-}
+
 	
 public static void searchAndReserveCar() {
         
@@ -193,7 +257,7 @@ public static void searchAndReserveCar() {
         // Filter available cars
         final Kontor chosenUtleiekontor = selectedUtleiekontor;
         
-        List<Bil> availableCars = biler.stream()
+        List<Bil> availableCars = getAllCars().stream()
                 .filter(bil -> bil.getLedig() && bil.getUtleiekontor() == chosenUtleiekontor)
                 .collect(Collectors.toList());
             
@@ -379,8 +443,8 @@ public static void addNewKontor() {
     	kontorData.add(tlfNmr.getText());
 
     	Adresse adresse1 = new Adresse(gateadresse.toString(), postNmr.toString(), poststed.toString());
-    	UtleieKontor kontor1 = new UtleieKontor(Integer.parseInt(kontorNmr.toString()), adresse1, tlfNmr.toString());
-    	utleiekontor.add(kontor1);
+    	Utleiekontor kontor1 = new Utleiekontor(Integer.parseInt(kontorNmr.toString()), adresse1, tlfNmr.toString());
+    	utleiekontorer.add(kontor1);
     	
         // Output the collected data (or process it as needed)
         System.out.println(kontorData);
@@ -393,49 +457,17 @@ public static void addNewKontor() {
 		LocalDateTime tidspunkt = LocalDateTime.now();
 		
 		return tidspunkt;
+	}	
+	
+	public static List<Bil> getAllCars() {
+		
+		
+		
+	
+		
+		
 	}
 	
-	
-	public String getNavn() {
-		return navn;
-	}
-
-	public void setNavn(String navn) {
-		this.navn = navn;
-	}
-
-	public Adresse getFirmaAdresse() {
-		return firmaAdresse;
-	}
-
-	public void setFirmaAdresse(Adresse firmaAdresse) {
-		this.firmaAdresse = firmaAdresse;
-	}
-
-	public String getTlfNmr() {
-		return tlfNmr;
-	}
-
-	public void setTlfNmr(String tlfNmr) {
-		this.tlfNmr = tlfNmr;
-	}
-
-	public static List<Bil> getBiler() {
-		return biler;
-	}
-
-	public static void setBiler(List<Bil> biler) {
-		BilutleieSelskap.biler = biler;
-	}
-
-	public static List<Utlaan> getUtlaan() {
-		return utlaan;
-	}
-
-	public static void setUtlaan(List<Utlaan> utlaan) {
-		BilutleieSelskap.utlaan = utlaan;
-	}
-
-	
+	*/
 	
 }

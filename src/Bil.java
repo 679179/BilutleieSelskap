@@ -1,79 +1,88 @@
 
 public class Bil {
 
-	private String registreringsNmr;
+	private String registreringsNr;
+	private Utleiekontor utleieKontor;
+	private String merke;
 	private String modell;
-	private Colour farge;
-	private Utleiegruppe gruppe;
+	private Color farge;
+	private BilKategori bilKategori;
 	private boolean ledig;
-	private Kontor utleiekontor;
+	private int kmStand;
 	
-	public Bil() {
-	}
-	
-	public Bil(String registreringsNmr, String modell, Colour farge, Utleiegruppe gruppe, boolean ledig, Kontor utleiekontor) {
-		this.registreringsNmr = registreringsNmr;
+	public Bil(
+			String registreringsNr, 
+			Utleiekontor utleieKontor, 
+			String merke, 
+			String modell, 
+			Color farge,
+			BilKategori bilKategori, 
+			boolean ledig, 
+			int kmStand) 
+		{
+		this.registreringsNr = registreringsNr;
+		this.utleieKontor = utleieKontor;
+		this.merke = merke;
 		this.modell = modell;
 		this.farge = farge;
-		this.gruppe = gruppe;
+		this.bilKategori = bilKategori;
 		this.ledig = ledig;
-		this.utleiekontor = utleiekontor;
+		this.kmStand = kmStand;
 	}
-
 	
-	
-	public String getRegistreringsNmr() {
-		return registreringsNmr;
+	public String getRegistreringsNr() {
+		return registreringsNr;
 	}
-
-	public void setRegistreringsNmr(String registreringsNmr) {
-		this.registreringsNmr = registreringsNmr;
+	public void setRegistreringsNr(String registreringsNr) {
+		this.registreringsNr = registreringsNr;
 	}
-
+	public Utleiekontor getUtleieKontor() {
+		return utleieKontor;
+	}
+	public void setUtleieKontor(Utleiekontor utleieKontor) {
+		this.utleieKontor = utleieKontor;
+	}
+	public String getMerke() {
+		return merke;
+	}
+	public void setMerke(String merke) {
+		this.merke = merke;
+	}
 	public String getModell() {
 		return modell;
 	}
-
 	public void setModell(String modell) {
 		this.modell = modell;
 	}
-
-	public Colour getFarge() {
+	public Color getFarge() {
 		return farge;
 	}
-
-	public void setFarge(Colour farge) {
+	public void setFarge(Color farge) {
 		this.farge = farge;
 	}
-
-	public Utleiegruppe getGruppe() {
-		return gruppe;
+	public BilKategori getBilKategori() {
+		return bilKategori;
 	}
-
-	public void setGruppe(Utleiegruppe gruppe) {
-		this.gruppe = gruppe;
+	public void setBilKategori(BilKategori bilKategori) {
+		this.bilKategori = bilKategori;
 	}
-	
-	public Kontor getUtleiekontor() {
-		return utleiekontor;
-	}
-
-	public void setUtleiekontor(Kontor utleiekontor) {
-		this.utleiekontor = utleiekontor;
-	}
-
-	public boolean getLedig() {
+	public boolean isLedig() {
 		return ledig;
 	}
-
 	public void setLedig(boolean ledig) {
 		this.ledig = ledig;
 	}
-
-	@Override
-	public String toString() {
-		return "[" + registreringsNmr + ", " + modell + ", " + farge + ", "
-				+ gruppe + ", " + ledig + "]";
+	public int getKmStand() {
+		return kmStand;
+	}
+	public void setKmStand(int kmStand) {
+		this.kmStand = kmStand;
 	}
 	
+	@Override
+	public String toString() {
+		return "Bil [registreringsNr=" + registreringsNr + ", merke=" + merke + ", modell=" + modell + ", farge="
+				+ farge + "]";
+	}
+
 }
