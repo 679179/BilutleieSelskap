@@ -60,10 +60,6 @@ public class Utleiekontor {
 	public void addReservasjon(Reservasjon reservasjon) {
 		reservasjoner.add(reservasjon);
 	}
-	
-	public void setReservasjoner(List<Reservasjon> reservasjoner) {
-		this.reservasjoner = reservasjoner;
-	}
 
 	@Override
 	public String toString() {

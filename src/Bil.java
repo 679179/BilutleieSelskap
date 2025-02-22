@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Bil {
 
@@ -7,7 +10,7 @@ public class Bil {
 	private String modell;
 	private Color farge;
 	private BilKategori bilKategori;
-	private boolean ledig;
+	private List<LocalDateTime[]> reverasjonsDatoer;
 	private int kmStand;
 	
 	public Bil(
@@ -26,8 +29,8 @@ public class Bil {
 		this.modell = modell;
 		this.farge = farge;
 		this.bilKategori = bilKategori;
-		this.ledig = ledig;
 		this.kmStand = kmStand;
+		this.reverasjonsDatoer = new ArrayList<>();
 	}
 	
 	public String getRegistreringsNr() {
@@ -66,18 +69,25 @@ public class Bil {
 	public void setBilKategori(BilKategori bilKategori) {
 		this.bilKategori = bilKategori;
 	}
-	public boolean isLedig() {
-		return ledig;
-	}
-	public void setLedig(boolean ledig) {
-		this.ledig = ledig;
-	}
 	public int getKmStand() {
 		return kmStand;
 	}
 	public void setKmStand(int kmStand) {
 		this.kmStand = kmStand;
 	}
+	
+	public void addReservasjonsDato(LocalDateTime start, LocalDateTime end) {
+		this.reverasjonsDatoer.add(new LocalDateTime[] {start, end});
+	}
+	
+	public boolean erLedigForDatoer(LocalDateTime start, LocalDateTime end) {
+        for (LocalDateTime[] reservation : reverasjonsDatoer) {
+            if (start.isBefore(reservation[1]) && end.isAfter(reservation[0])) {
+                return false; // overlapp, ikke ledig
+            }
+        }
+        return true;
+    }
 	
 	@Override
 	public String toString() {

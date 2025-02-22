@@ -5,8 +5,8 @@ public class Reservasjon {
 	private double pris;
 	private Bil bil;
 	private Kunde kunde;
-	private Utleiekontor kontorHent;
-	private Utleiekontor kontorRetur;
+	private Lokasjon kontorHent;
+	private Lokasjon kontorRetur;
 	private LocalDateTime datoHent;
 	private LocalDateTime datoRetur;
 	private LocalDateTime datoFaktiskRetur;
@@ -16,8 +16,8 @@ public class Reservasjon {
 			double pris, 
 			Bil bil, 
 			Kunde kunde, 
-			Utleiekontor kontorHent, 
-			Utleiekontor kontorRetur,
+			Lokasjon kontorHent, 
+			Lokasjon kontorRetur,
 			LocalDateTime datoHent, 
 			LocalDateTime datoRetur
 		) {
@@ -49,16 +49,16 @@ public class Reservasjon {
 	public void setKunde(Kunde kunde) {
 		this.kunde = kunde;
 	}
-	public Utleiekontor getKontorHent() {
+	public Lokasjon getKontorHent() {
 		return kontorHent;
 	}
-	public void setKontorHent(Utleiekontor kontorHent) {
+	public void setKontorHent(Lokasjon kontorHent) {
 		this.kontorHent = kontorHent;
 	}
-	public Utleiekontor getKontorRetur() {
+	public Lokasjon getKontorRetur() {
 		return kontorRetur;
 	}
-	public void setKontorRetur(Utleiekontor kontorRetur) {
+	public void setKontorRetur(Lokasjon kontorRetur) {
 		this.kontorRetur = kontorRetur;
 	}
 	public LocalDateTime getDatoHent() {
