@@ -96,7 +96,8 @@ public class Reservasjon {
 	           "  Dato Hent: " + datoHent + "\n" +
 	           "  Dato Retur: " + datoRetur + "\n" +
 	           "  Dato Faktisk Retur: " + datoFaktiskRetur + "\n" +
-	           "  Skyldig Beløp: " + skydligBelop + "\n";
+	           "  Skyldig Beløp: " + skydligBelop + "\n" +
+	           "  Kontor for hent: " + kontorHent + "\n";
 	}
 	
 	

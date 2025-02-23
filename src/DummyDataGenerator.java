@@ -92,6 +92,7 @@ public class DummyDataGenerator {
             
             // Opprett reservasjonen
             Reservasjon reservasjon = new Reservasjon(totalPris, bil, kunde, kontorHentLokasjon, kontorReturLokasjon, datoHent, datoRetur);
+            System.out.println(reservasjon);
 
             // Legg til reservasjonen
             kontorHent.addReservasjon(reservasjon);

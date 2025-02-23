@@ -24,13 +24,7 @@ public class BilutleieSelskap {
 	private static List<Kunde> kunder;
 	
 	
-	public static void main(String[] args) {
-		initFields();
-		generateDummyData();
-		startApp();		
-	}
-	
-	public static void initFields() {
+	static {
 		navn = "Verdens beste bilutleieselskap";
 		firmaAdresse = new Adresse("Skaratunet 13", "6018", "Forde");
 		tlfNmr = "12345678";
@@ -39,47 +33,46 @@ public class BilutleieSelskap {
 		
 	}
 	
+	
+	public static void main(String[] args) {
+		generateDummyData();
+		startApp();		
+	}
+	
+	
 	public static void generateDummyData() {
 		DummyDataGenerator.addGeneratedKontorer(utleiekontorer);
 		DummyDataGenerator.addGeneratedCarsToKontorer(utleiekontorer);
 		DummyDataGenerator.addGeneratedReservations(utleiekontorer, kunder);
 	}
-	
-	
 
-	
-	
 	public static void startApp() {
-		
-		BilReservasjonApp.start(utleiekontorer, kunder);
-	
-		
-		/*
-		
-		boolean kjorProgram = true;
-		while(kjorProgram) {
-		    String velgBruker = showInputDialog("Velg brukersystem \n 1 for Kunde \n 2 for Konsulent \n 3 for Admin \n 4 for å stenge program");
-			switch(velgBruker) {
-			case "1":
-				BilReservasjonApp.start();
-				break;
-			case "2":
-				konsulentProgram();
-				break;
-			case "3":
-				adminProgram();
-				break;
-			case "4":
-				kjorProgram = false;
-				break;
-			default:
-				System.out.println("Du kan kun velge mellom 1,2,3 eller 4. Skriv ned tallet og trykk enter og prøv på nytt");	
-			}	
-				
-		}
-		
-		*/
-	}
+        BrukerRolle[] options = { BrukerRolle.KUNDE, BrukerRolle.KONSULENT, BrukerRolle.ADMIN };
+        BrukerRolle selectedRole = (BrukerRolle) JOptionPane.showInputDialog(
+                null,
+                "Velg brukersystem",
+                "Bruker Valg",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+        
+        switch (selectedRole) {
+            case KUNDE:
+                BilReservasjonApp.start(utleiekontorer, kunder);
+                break;
+            case KONSULENT:
+                KonsulentApp.start(utleiekontorer, kunder);
+                break;
+            case ADMIN:
+                AdminApp.start(utleiekontorer, kunder);
+                break;
+            default:
+                System.out.println("Ugyldig valg, prøv igjen.");
+        }
+    }
+    
 	
 	/*
 
@@ -229,15 +222,6 @@ public static void addNewKontor() {
 		
 		return tidspunkt;
 	}	
-	
-	public static List<Bil> getAllCars() {
-		
-		
-		
-	
-		
-		
-	}
 	
 	*/
 	

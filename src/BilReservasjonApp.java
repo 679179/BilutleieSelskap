@@ -12,6 +12,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 
 
@@ -213,6 +220,7 @@ public class BilReservasjonApp {
 	    
 	    return totalPris;
 	}
+    
 	
 	private static void confirmReservation(
 			double pris, 
