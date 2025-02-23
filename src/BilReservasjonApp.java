@@ -1,3 +1,4 @@
+
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -12,30 +13,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
-
-
 
 public class BilReservasjonApp {	
-	
-    private static List<Utleiekontor> utleiekontorer;
-    private static List<Kunde> kunder;
 
-    public static void start(List<Utleiekontor> utleiekontorerRef, List<Kunde> kunderRef) {
-        utleiekontorer = utleiekontorerRef;
-        kunder = kunderRef;
+    public static void start() {
+        
         Map<String, Object> searchParams = getSearchParamsFromUser();
 
         LocalDateTime pickupDate = (LocalDateTime) searchParams.get("pickupDate");
         LocalDateTime returnDate = (LocalDateTime) searchParams.get("returnDate");
-        Lokasjon chosenPickUpLocation = (Lokasjon) searchParams.get("chosenPickUpLocation");
-        Lokasjon chosenReturnLocation = (Lokasjon) searchParams.get("chosenReturnLocation");
+        String chosenPickUpLocation = (String) searchParams.get("chosenPickUpLocation");
+        String chosenReturnLocation = (String) searchParams.get("chosenReturnLocation");
 
         Bil carPicked = getCarPickedFromAvailible(pickupDate, returnDate, chosenPickUpLocation, chosenReturnLocation);
         Kunde customer = getCustomerInfoForReservation();
@@ -64,20 +52,20 @@ public class BilReservasjonApp {
     private static Map<String, Object> getSearchParamsFromUser() {
         LocalDateTime pickupDate = null;
         while (pickupDate == null) {
-            pickupDate = DateTimeHelper.getDateAndTimeFromUser("Vennligst oppgi hentedato, i format YYYY-MM-DD HH:MM \n f.eks. 2025-02-22 18:30");
+            pickupDate = Utils.getDateAndTimeFromUser("Vennligst oppgi hentedato, i format YYYY-MM-DD HH:MM \n f.eks. 2025-02-22 18:30");
         }
 
         LocalDateTime returnDate = null;
         while (returnDate == null) {
-            returnDate = DateTimeHelper.getDateAndTimeFromUser("Vennligst oppgi returdato, i format YYYY-MM-DD HH:MM \n f.eks. 2025-02-22 10:00");
+            returnDate = Utils.getDateAndTimeFromUser("Vennligst oppgi returdato, i format YYYY-MM-DD HH:MM \n f.eks. 2025-02-22 10:00");
             if (returnDate != null && returnDate.isBefore(pickupDate)) {
                 JOptionPane.showMessageDialog(null, "Returdato må være etter hentedato.");
                 returnDate = null;
             }
         }
 
-        Lokasjon chosenPickUpLocation = getLocation("Velg utleiekontor for henting av bil");
-        Lokasjon chosenReturnLocation = getLocation("Velg utleiekontor for retur av bil");
+        String chosenPickUpLocation = Utils.getLocationFromUser("Velg utleiekontor for henting av bil");
+        String chosenReturnLocation = Utils.getLocationFromUser("Velg utleiekontor for retur av bil");
 
         Map<String, Object> searchParams = new HashMap<>();
         searchParams.put("pickupDate", pickupDate);
@@ -87,33 +75,10 @@ public class BilReservasjonApp {
 
         return searchParams;
     }
-    
-	private static Lokasjon getLocation(String promptMsg) {
-        final JDialog dialog = new JDialog((Frame) null, promptMsg, true);
-        dialog.setLayout(new FlowLayout());
-        dialog.setSize(400, 200);
-
-        final Lokasjon[] selectedLocation = {null};
-
-        for (Lokasjon lokasjon : Lokasjon.values()) {
-            JButton button = new JButton(lokasjon.name());
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    selectedLocation[0] = lokasjon;
-                    dialog.dispose();
-                }
-            });
-            dialog.add(button);
-        }
-
-        dialog.setVisible(true);
-        return selectedLocation[0];
-	}
 		
-	private static Bil getCarPickedFromAvailible(LocalDateTime pickupDate,LocalDateTime returnDate, Lokasjon chosenPickUpLocation, Lokasjon chosenReturnLocation) {
+	private static Bil getCarPickedFromAvailible(LocalDateTime pickupDate,LocalDateTime returnDate, String chosenPickUpLocation, String chosenReturnLocation) {
 					
-		List<Bil> availibleCars = utleiekontorer
+		List<Bil> availibleCars = BilutleieSelskap.getUtleiekontorer()
 				.stream()
 				.filter(kontor -> kontor.getLokasjon() == chosenPickUpLocation)
 				.toList()
@@ -206,8 +171,8 @@ public class BilReservasjonApp {
 			BilKategori bilkategori, 
 			LocalDateTime henteDato, 
 			LocalDateTime returDato, 
-			Lokasjon henteLokasjon, 
-			Lokasjon returLokasjon) 
+			String henteLokasjon, 
+			String returLokasjon) 
 		{
 	    long days = ChronoUnit.DAYS.between(henteDato, returDato);
 	    int dagspris = PrisKonfigurasjon.getDagspris(bilkategori);
@@ -226,8 +191,8 @@ public class BilReservasjonApp {
 			double pris, 
 			Bil bil, 
 			Kunde kunde, 
-			Lokasjon kontorHent, 
-			Lokasjon kontorRetur,
+			String kontorHent, 
+			String kontorRetur,
 			LocalDateTime datoHent, 
 			LocalDateTime datoRetur
 			) {
@@ -244,14 +209,12 @@ public class BilReservasjonApp {
 				datoRetur
 		);
 		
-		Utleiekontor correspondingUtleiekontor = utleiekontorer.stream().filter(kontor -> kontor.getLokasjon() == kontorHent).toList().get(0);
+		Utleiekontor correspondingUtleiekontor = BilutleieSelskap.getUtleiekontorer().stream().filter(kontor -> kontor.getLokasjon() == kontorHent).toList().get(0);
 		
 		correspondingUtleiekontor.addReservasjon(nyReservasjon);
 		
 		System.out.println(nyReservasjon);
 		System.out.println(bil);
 		System.out.println(correspondingUtleiekontor);
-		
-		
 	}
 }

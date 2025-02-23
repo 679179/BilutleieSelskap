@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Utleiekontor {
 
-	private Lokasjon lokasjon;
+	private String lokasjon;
 	private int kontorNr;
 	private Adresse adresse;
 	private String tlfNr;
@@ -11,7 +11,7 @@ public class Utleiekontor {
 	private List<Reservasjon> reservasjoner;
 
 	
-	public Utleiekontor(Lokasjon lokasjon, int kontorNr, Adresse adresse, String tlfNr) {
+	public Utleiekontor(String lokasjon, int kontorNr, Adresse adresse, String tlfNr) {
 		this.lokasjon = lokasjon;
 		this.kontorNr = kontorNr;
 		this.adresse = adresse;
@@ -20,10 +20,10 @@ public class Utleiekontor {
 		this.reservasjoner = new ArrayList<Reservasjon>();
 	}
 
-	public Lokasjon getLokasjon() {
+	public String getLokasjon() {
 		return lokasjon;
 	}
-	public void setLokasjon(Lokasjon lokasjon) {
+	public void setLokasjon(String lokasjon) {
 		this.lokasjon = lokasjon;
 	}
 	public int getKontorNr() {

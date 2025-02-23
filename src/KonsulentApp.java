@@ -1,22 +1,11 @@
-import java.util.List;
-
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.time.LocalDateTime;
 
 
 public class KonsulentApp {
 	
-    private static List<Utleiekontor> utleiekontorer;
-    private static List<Kunde> kunder;
-
-	
-    public static void start(List<Utleiekontor> utleiekontorerRef, List<Kunde> kunderRef) {    
-        utleiekontorer = utleiekontorerRef;
-        kunder = kunderRef;
+    public static void start() {    
         selectAction();
     }
     
@@ -42,7 +31,7 @@ public class KonsulentApp {
 
             switch (selectedHandling) {
                 case RESERVER_BIL:
-                    BilReservasjonApp.start(utleiekontorer, kunder);
+                    BilReservasjonApp.start();
                     break;
                 case REGISTRER_HENTING:
                     registerCarPickup();
@@ -59,26 +48,10 @@ public class KonsulentApp {
 	private static void registerCarPickup() {
         Reservasjon reservasjon = getReservation();
         String creditCardNo = getCreditcardNo(reservasjon);
-        LocalDateTime datoHent = DateTimeHelper.getDateAndTimeFromUser("Legg inn dato og klokkeslett for utlevering (YYYY-MM-DD HH:MM)");
+        LocalDateTime datoHent = Utils.getDateAndTimeFromUser("Legg inn dato og klokkeslett for utlevering (YYYY-MM-DD HH:MM)");
         reservasjon.getKunde().setKredittkort(creditCardNo);
         String bekrStr = reservasjon.getBil().getMerke() + " med reg.nr " + reservasjon.getBil().getRegistreringsNr() + " er bekreftet utlevert for dato: " + datoHent;
         JOptionPane.showMessageDialog(null, bekrStr, "Bekreftelse", JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	private static Lokasjon getSelectedLocation() {
-	    Lokasjon[] options = Lokasjon.values();
-	    Lokasjon selectedLocation = (Lokasjon) JOptionPane.showInputDialog(
-	            null,
-	            "Vel tilhørende lokasjon for ditt kontor",
-	            "Lokasjon Valg",
-	            JOptionPane.QUESTION_MESSAGE,
-	            null,
-	            options,
-	            options[0]
-	    );
-
-	    return selectedLocation;
-		
 	}
 	
 	public static String[] getCustomerAndCarInfo() {
@@ -108,15 +81,11 @@ public class KonsulentApp {
     }
 	
 	private static Reservasjon getReservation() {
-		Lokasjon location = getSelectedLocation();
+		String location = Utils.getExistingLocationFromUser();
 		String[] customerAndCarInfo = getCustomerAndCarInfo();
 		String etternavn = customerAndCarInfo[0];
 		String regNr = customerAndCarInfo[1];
-		Utleiekontor kontor = utleiekontorer.stream()
-		        .filter(k -> k.getLokasjon().equals(location))
-		        .findFirst()
-		        .orElseThrow(() -> new RuntimeException("Utleiekontor med lokasjon " + location + " ikke funnet"));
-
+		Utleiekontor kontor = Utils.findUtleiekontorByLocation(location);
 		Reservasjon reservasjon = kontor.getReservasjoner().stream()
 		        .filter(res -> res.getBil().getRegistreringsNr().toUpperCase().equals(regNr.toUpperCase()) 
 		                && res.getKunde().getEtternavn().toUpperCase().equals(etternavn.toUpperCase()))
@@ -173,7 +142,7 @@ public class KonsulentApp {
 	
 	private static void registerCarReturn() {
 		Reservasjon reservasjon = getReservation();
-		LocalDateTime datoRetur = DateTimeHelper.getDateAndTimeFromUser("Legg inn dato og klokkeslett for retur (YYYY-MM-DD HH:MM)");
+		LocalDateTime datoRetur = Utils.getDateAndTimeFromUser("Legg inn dato og klokkeslett for retur (YYYY-MM-DD HH:MM)");
 		String kmStand = getKmStand();
 		Bil bil = reservasjon.getBil();
 		int kmKjort = Integer.parseInt(kmStand)-bil.getKmStand();

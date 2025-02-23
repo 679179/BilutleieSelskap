@@ -6,41 +6,41 @@ import java.util.Random;
 public class DummyDataGenerator {
 	
     public static void addGeneratedKontorer(List<Utleiekontor> utleiekontorer) {
-        utleiekontorer.add(new Utleiekontor(Lokasjon.FORDE, 1, new Adresse("Hafstadvegen 23", "6800", "Førde"), "12345678"));
-        utleiekontorer.add(new Utleiekontor(Lokasjon.OSLO, 2, new Adresse("Karl Johans gate 15", "0154", "Oslo"), "23456789"));
-        utleiekontorer.add(new Utleiekontor(Lokasjon.TRONDHEIM, 3, new Adresse("Munkegata 34", "7011", "Trondheim"), "34567890"));
-        utleiekontorer.add(new Utleiekontor(Lokasjon.BERGEN, 4, new Adresse("Bryggen 47", "5003", "Bergen"), "45678901"));
-        utleiekontorer.add(new Utleiekontor(Lokasjon.KRISTIANSAND, 5, new Adresse("Markens gate 35", "4612", "Kristiansand"), "56789012"));
+        utleiekontorer.add(new Utleiekontor("FORDE", 1, new Adresse("Hafstadvegen 23", "6800", "Førde"), "12345678"));
+        utleiekontorer.add(new Utleiekontor("OSLO", 2, new Adresse("Karl Johans gate 15", "0154", "Oslo"), "23456789"));
+        utleiekontorer.add(new Utleiekontor("TRONDHEIM", 3, new Adresse("Munkegata 34", "7011", "Trondheim"), "34567890"));
+        utleiekontorer.add(new Utleiekontor("BERGEN", 4, new Adresse("Bryggen 47", "5003", "Bergen"), "45678901"));
+        utleiekontorer.add(new Utleiekontor("KRISTIANSAND", 5, new Adresse("Markens gate 35", "4612", "Kristiansand"), "56789012"));
     }
     
 	public static void addGeneratedCarsToKontorer( List<Utleiekontor> utleiekontorer) {
 		
-	    Bil[] biler = {
-	            new Bil("AB1234", null, "Toyota", "Corolla", Color.RED, BilKategori.LITEN, false, 50000),
-	            new Bil("CD5678", null, "BMW", "i3", Color.BLUE, BilKategori.MELLOMSTOR, false, 75000),
-	            new Bil("EF9012", null, "Tesla", "Model S", Color.BLACK, BilKategori.STASJONSVOGN, false, 20000),
-	            new Bil("GH3456", null, "Volkswagen", "Golf", Color.SILVER, BilKategori.LITEN, false, 60000),
-	            new Bil("IJ7890", null, "Ford", "Focus", Color.GRAY, BilKategori.MELLOMSTOR, false, 85000),
-	            
-	            new Bil("KL1234", null, "Nissan", "Altima", Color.WHITE, BilKategori.STOR, false, 30000),
-	            new Bil("MN5678", null, "Hyundai", "Santa Fe", Color.BLACK, BilKategori.STASJONSVOGN, false, 45000),
-	            new Bil("OP9012", null, "Audi", "A4", Color.BLUE, BilKategori.MELLOMSTOR, false, 40000),
-	            new Bil("QR3456", null, "Mazda", "CX-5", Color.RED, BilKategori.STOR, false, 52000),
-	            new Bil("ST7890", null, "Chevrolet", "Impala", Color.SILVER, BilKategori.STOR, false, 90000),
-	            
-	            new Bil("UV1234", null, "Honda", "Civic", Color.GREEN, BilKategori.LITEN, false, 15000),
-	            new Bil("WX5678", null, "Mercedes", "C-Class", Color.ORANGE, BilKategori.STASJONSVOGN, false, 7000),
-	            new Bil("YZ9012", null, "Kia", "Sorento", Color.PURPLE, BilKategori.STASJONSVOGN, false, 22000),
-	            new Bil("AB3456", null, "Subaru", "Outback", Color.GRAY, BilKategori.MELLOMSTOR, false, 67000),
-	            new Bil("CD7890", null, "Jeep", "Cherokee", Color.YELLOW, BilKategori.LITEN, false, 49000),
-	            
-	            new Bil("EF1234", null, "Volvo", "XC90", Color.RED, BilKategori.MELLOMSTOR, false, 34000),
-	            new Bil("GH5678", null, "Jaguar", "XE", Color.BLUE, BilKategori.STASJONSVOGN, false, 56000),
-	            new Bil("IJ9012", null, "Lexus", "RX", Color.BLACK, BilKategori.MELLOMSTOR, false, 29000),
-	            new Bil("KL3456", null, "Porsche", "Macan", Color.SILVER, BilKategori.STASJONSVOGN, false, 47000),
-	            new Bil("MN7890", null, "Land Rover", "Range Rover", Color.GRAY, BilKategori.STASJONSVOGN, false, 110000)
-	        };
-		    
+		Bil[] biler = {
+			    new Bil("AB1234", null, "Toyota", "Corolla", Color.RØD, BilKategori.LITEN, 50000),
+			    new Bil("CD5678", null, "BMW", "i3", Color.BLÅ, BilKategori.MELLOMSTOR, 75000),
+			    new Bil("EF9012", null, "Tesla", "Model S", Color.SVART, BilKategori.STASJONSVOGN, 20000),
+			    new Bil("GH3456", null, "Volkswagen", "Golf", Color.SØLV, BilKategori.LITEN, 60000),
+			    new Bil("IJ7890", null, "Ford", "Focus", Color.GRÅ, BilKategori.MELLOMSTOR, 85000),
+			    
+			    new Bil("KL1234", null, "Nissan", "Altima", Color.HVIT, BilKategori.STOR, 30000),
+			    new Bil("MN5678", null, "Hyundai", "Santa Fe", Color.SVART, BilKategori.STASJONSVOGN, 45000),
+			    new Bil("OP9012", null, "Audi", "A4", Color.BLÅ, BilKategori.MELLOMSTOR, 40000),
+			    new Bil("QR3456", null, "Mazda", "CX-5", Color.RØD, BilKategori.STOR, 52000),
+			    new Bil("ST7890", null, "Chevrolet", "Impala", Color.SØLV, BilKategori.STOR, 90000),
+			    
+			    new Bil("UV1234", null, "Honda", "Civic", Color.GRØNN, BilKategori.LITEN, 15000),
+			    new Bil("WX5678", null, "Mercedes", "C-Class", Color.ORANSJE, BilKategori.STASJONSVOGN, 7000),
+			    new Bil("YZ9012", null, "Kia", "Sorento", Color.LILLA, BilKategori.STASJONSVOGN, 22000),
+			    new Bil("AB3456", null, "Subaru", "Outback", Color.GRÅ, BilKategori.MELLOMSTOR, 67000),
+			    new Bil("CD7890", null, "Jeep", "Cherokee", Color.GUL, BilKategori.LITEN, 49000),
+			    
+			    new Bil("EF1234", null, "Volvo", "XC90", Color.RØD, BilKategori.MELLOMSTOR, 34000),
+			    new Bil("GH5678", null, "Jaguar", "XE", Color.BLÅ, BilKategori.STASJONSVOGN, 56000),
+			    new Bil("IJ9012", null, "Lexus", "RX", Color.SVART, BilKategori.MELLOMSTOR, 29000),
+			    new Bil("KL3456", null, "Porsche", "Macan", Color.SØLV, BilKategori.STASJONSVOGN, 47000),
+			    new Bil("MN7890", null, "Land Rover", "Range Rover", Color.GRÅ, BilKategori.STASJONSVOGN, 110000)
+			};
+		
         for (int i = 0; i < biler.length; i++) {
         	int kontorIndex = i % 5;
             biler[i].setUtleieKontor(utleiekontorer.get(kontorIndex));
@@ -87,8 +87,8 @@ public class DummyDataGenerator {
             double dagspris = PrisKonfigurasjon.getDagspris(bil.getBilKategori());
             double totalPris = dager * dagspris;
             
-            Lokasjon kontorHentLokasjon = kontorHent.getLokasjon();
-            Lokasjon kontorReturLokasjon = kontorHent.getLokasjon();
+            String kontorHentLokasjon = kontorHent.getLokasjon();
+            String kontorReturLokasjon = kontorRetur.getLokasjon();
             
             // Opprett reservasjonen
             Reservasjon reservasjon = new Reservasjon(totalPris, bil, kunde, kontorHentLokasjon, kontorReturLokasjon, datoHent, datoRetur);

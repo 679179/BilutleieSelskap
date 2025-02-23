@@ -20,7 +20,6 @@ public class Bil {
 			String modell, 
 			Color farge,
 			BilKategori bilKategori, 
-			boolean ledig, 
 			int kmStand) 
 		{
 		this.registreringsNr = registreringsNr;
