@@ -4,11 +4,9 @@ import java.time.LocalDateTime;
 
 
 public class KonsulentApp {
-	
     public static void start() {    
         selectAction();
     }
-    
     private static void selectAction() {
         KonsulentHandling[] options = {
                 KonsulentHandling.RESERVER_BIL,
@@ -24,11 +22,7 @@ public class KonsulentApp {
                     options,
                     options[0]
             );
-
-            if (selectedHandling == null) {
-                return;
-            }
-
+            if (selectedHandling == null) return;
             switch (selectedHandling) {
                 case RESERVER_BIL:
                     BilReservasjonApp.start();
@@ -41,8 +35,8 @@ public class KonsulentApp {
                     break;
                 default:
                     System.out.println("Ugyldig valg, prøv igjen.");
+                    BilutleieSelskap.startApp();
             }
-    	
     }
 	
 	private static void registerCarPickup() {
@@ -52,23 +46,20 @@ public class KonsulentApp {
         reservasjon.getKunde().setKredittkort(creditCardNo);
         String bekrStr = reservasjon.getBil().getMerke() + " med reg.nr " + reservasjon.getBil().getRegistreringsNr() + " er bekreftet utlevert for dato: " + datoHent;
         JOptionPane.showMessageDialog(null, bekrStr, "Bekreftelse", JOptionPane.INFORMATION_MESSAGE);
+		BilutleieSelskap.startApp();
 	}
 	
 	public static String[] getCustomerAndCarInfo() {
         JTextField lastNameField = new JTextField();
         JTextField registrationNumberField = new JTextField();
-        
         Object[] message = {
             "Etternavn:", lastNameField,
             "Registreringsnummer:", registrationNumberField
         };
-
         int option = JOptionPane.showConfirmDialog(null, message, "Oppgi kundens etternavn og reg.nr til bilen", JOptionPane.OK_CANCEL_OPTION);
-
         if (option == JOptionPane.OK_OPTION) {
             String lastName = lastNameField.getText();
             String registrationNumber = registrationNumberField.getText();
-            
             if (lastName.isEmpty() || registrationNumber.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Begge feltene må fylles ut!", "Feil", JOptionPane.ERROR_MESSAGE);
                 return null;
@@ -100,15 +91,12 @@ public class KonsulentApp {
 	}
 	
 	private static String getCreditcardNo(Reservasjon reservasjon) {
-		
 	    JTextField creditCardField = new JTextField();
 	    Object[] message = {
 	        "Reservasjon funnet: " + reservasjon.toString() + "\n\nLegg inn kredittkort nummer til kunde:",
 	        creditCardField
 	    };
-
 	    int option = JOptionPane.showConfirmDialog(null, message, "Bekreft utlevering av bil", JOptionPane.OK_CANCEL_OPTION);
-
 	    String ccNo = null;
 	    if (option == JOptionPane.OK_OPTION) {
 	    	ccNo = creditCardField.getText();
@@ -117,7 +105,6 @@ public class KonsulentApp {
 	        } 
 	    }
 	    return ccNo;
-		
 	}
 	
 	private static String getKmStand() {
@@ -126,9 +113,7 @@ public class KonsulentApp {
 	        "Legg inn km. stand til bilen",
 	        kmStandField
 	    };
-
 	    int option = JOptionPane.showConfirmDialog(null, message, "Bekreft km stand", JOptionPane.OK_CANCEL_OPTION);
-
 	    String kmStand = null;
 	    if (option == JOptionPane.OK_OPTION) {
 	    	kmStand = kmStandField.getText();
@@ -154,6 +139,7 @@ public class KonsulentApp {
         		" er bekreftet returnert for dato : " + datoRetur + ". \n" +
         		"Antall km kjørt under leie var: " + kmKjort;
         JOptionPane.showMessageDialog(null, bekrStr, "Bekreftelse", JOptionPane.INFORMATION_MESSAGE);
+		BilutleieSelskap.startApp();
 	}
 
 }

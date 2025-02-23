@@ -2,11 +2,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class AdminApp {
-	
 	public static void start() {
 		selectAction();
 	}
-	
     private static void selectAction() {
         AdminHandling[] options = {
         		AdminHandling.OPPRETT_UTLEIEKONTOR,
@@ -21,11 +19,7 @@ public class AdminApp {
                     options,
                     options[0]
             );
-
-            if (selectedHandling == null) {
-                return;
-            }
-
+            if (selectedHandling == null) return;
             switch (selectedHandling) {
                 case OPPRETT_UTLEIEKONTOR:
                 	registerNewUtleiekontor();
@@ -47,7 +41,6 @@ public class AdminApp {
         JTextField poststedField = new JTextField();
         JTextField kontorNrField = new JTextField();
         JTextField tlfNrField = new JTextField();
-
         Object[] message = {
             "Lokasjon:", lokasjonField,
             "Gateadresse:", gateadresseField,
@@ -56,9 +49,7 @@ public class AdminApp {
             "Kontor nr:", kontorNrField,
             "Telefon nr:", tlfNrField
         };
-
         int option = JOptionPane.showConfirmDialog(null, message, "Register Nytt Utleiekontor", JOptionPane.OK_CANCEL_OPTION);
-
         if (option == JOptionPane.OK_OPTION) {
             String lokasjon = lokasjonField.getText();
             String gateadresse = gateadresseField.getText();
@@ -71,27 +62,23 @@ public class AdminApp {
                 JOptionPane.showMessageDialog(null, "Alle feltene må fylles ut!", "Feil", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            
-  
             Adresse adresse = new Adresse(gateadresse, postNmr, poststed);
             Utleiekontor newKontor = new Utleiekontor(lokasjon, kontorNr, adresse, tlfNr);
             BilutleieSelskap.addNewUtleiekontor(newKontor);
             JOptionPane.showMessageDialog(null, "Ditt nye utleiekontor ved " + lokasjon + " er registrert!" );
+    		BilutleieSelskap.startApp();
         }
     }
     
     private static void registerNewCar() {
-    	
     	String lokasjon = Utils.getExistingLocationFromUser();
     	Utleiekontor kontor = Utils.findUtleiekontorByLocation(lokasjon);
-    	
         JTextField registreringsNrField = new JTextField();
         JTextField merkeField = new JTextField();
         JTextField modellField = new JTextField();
         JTextField fargeField = new JTextField();
         JTextField bilKategoriField = new JTextField();
         JTextField kmStandField = new JTextField();
-
         Object[] message = {
             "registreringsNr:", registreringsNrField,
             "merke:", merkeField,
@@ -103,22 +90,20 @@ public class AdminApp {
 
         int option = JOptionPane.showConfirmDialog(null, message, "Registrer ny bil", JOptionPane.OK_CANCEL_OPTION);
         if(option != JOptionPane.OK_OPTION) return;
-        
         String registreringsNr = registreringsNrField.getText();
         String merke = merkeField.getText();
         String modell = modellField.getText();
         Color farge = Color.valueOf(fargeField.getText().toUpperCase());
         BilKategori bilKategori = BilKategori.valueOf(bilKategoriField.getText().toUpperCase());
         int kmStand = Integer.parseInt(kmStandField.getText());
-        
         if (registreringsNr.isEmpty() || merke.isEmpty() || modell.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Alle feltene må fylles ut!", "Feil", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
         Bil bil = new Bil(registreringsNr, kontor, merke, merke, farge, bilKategori, kmStand);
         kontor.addBil(bil);
         JOptionPane.showMessageDialog(null, merke + " er registert ved " + lokasjon + "!" );
+		BilutleieSelskap.startApp();
     }
 
 

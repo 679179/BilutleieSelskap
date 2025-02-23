@@ -45,7 +45,7 @@ public class BilutleieSelskap {
                 options,
                 options[0]
         );
-        
+        if(selectedRole == null) return;
         switch (selectedRole) {
             case KUNDE:
                 BilReservasjonApp.start();

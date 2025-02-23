@@ -17,36 +17,29 @@ import java.util.Map;
 public class BilReservasjonApp {	
 
     public static void start() {
-        
         Map<String, Object> searchParams = getSearchParamsFromUser();
-
         LocalDateTime pickupDate = (LocalDateTime) searchParams.get("pickupDate");
         LocalDateTime returnDate = (LocalDateTime) searchParams.get("returnDate");
         String chosenPickUpLocation = (String) searchParams.get("chosenPickUpLocation");
         String chosenReturnLocation = (String) searchParams.get("chosenReturnLocation");
-
         Bil carPicked = getCarPickedFromAvailible(pickupDate, returnDate, chosenPickUpLocation, chosenReturnLocation);
         Kunde customer = getCustomerInfoForReservation();
-        
-        if(carPicked != null && customer != null) {
-            double priceCalculated = getCaluclatedPriceForCar(
-            		carPicked.getBilKategori(), 
-            		pickupDate, 
-            		returnDate, 
-            		chosenPickUpLocation, 
-            		chosenReturnLocation);
-         
-        	confirmReservation(
-        			priceCalculated,
-        			carPicked,
-        			customer, 
-        			chosenPickUpLocation, 
-        			chosenReturnLocation,
-        			pickupDate,
-        			returnDate
-        	);	
-        }
-        
+        if(carPicked == null || customer == null) return;
+        double priceCalculated = getCaluclatedPriceForCar(
+        		carPicked.getBilKategori(), 
+        		pickupDate, 
+        		returnDate, 
+        		chosenPickUpLocation, 
+        		chosenReturnLocation);
+    	confirmReservation(
+    			priceCalculated,
+    			carPicked,
+    			customer, 
+    			chosenPickUpLocation, 
+    			chosenReturnLocation,
+    			pickupDate,
+    			returnDate
+    	);	        
     }
     
     private static Map<String, Object> getSearchParamsFromUser() {
@@ -54,7 +47,6 @@ public class BilReservasjonApp {
         while (pickupDate == null) {
             pickupDate = Utils.getDateAndTimeFromUser("Vennligst oppgi hentedato, i format YYYY-MM-DD HH:MM \n f.eks. 2025-02-22 18:30");
         }
-
         LocalDateTime returnDate = null;
         while (returnDate == null) {
             returnDate = Utils.getDateAndTimeFromUser("Vennligst oppgi returdato, i format YYYY-MM-DD HH:MM \n f.eks. 2025-02-22 10:00");
@@ -63,21 +55,17 @@ public class BilReservasjonApp {
                 returnDate = null;
             }
         }
-
         String chosenPickUpLocation = Utils.getLocationFromUser("Velg utleiekontor for henting av bil");
         String chosenReturnLocation = Utils.getLocationFromUser("Velg utleiekontor for retur av bil");
-
         Map<String, Object> searchParams = new HashMap<>();
         searchParams.put("pickupDate", pickupDate);
         searchParams.put("returnDate", returnDate);
         searchParams.put("chosenPickUpLocation", chosenPickUpLocation);
         searchParams.put("chosenReturnLocation", chosenReturnLocation);
-
         return searchParams;
     }
 		
 	private static Bil getCarPickedFromAvailible(LocalDateTime pickupDate,LocalDateTime returnDate, String chosenPickUpLocation, String chosenReturnLocation) {
-					
 		List<Bil> availibleCars = BilutleieSelskap.getUtleiekontorer()
 				.stream()
 				.filter(kontor -> kontor.getLokasjon() == chosenPickUpLocation)
@@ -87,23 +75,17 @@ public class BilReservasjonApp {
 				.stream()
 				.filter(bil -> bil.erLedigForDatoer(pickupDate, returnDate))
 				.toList();
-	
 		if (availibleCars.size() == 0) {
 		    JOptionPane.showMessageDialog(null, "Ingen tilgjengelige biler for valgt periode ved " + chosenPickUpLocation, "Ingen biler", JOptionPane.INFORMATION_MESSAGE);
 		    return null;
 		}
-		
-        
         final JDialog dialog = new JDialog(
         		(Frame) null, 
         		"Vi har følgende biler tilgjengelig ved " + chosenPickUpLocation + "for valgt periode. Vennligst klikk på den du vil reservere", 
         		true);
-        
         dialog.setLayout(new GridLayout(0, 1));
         dialog.setSize(600, 400);
-
         final Bil[] chosenCar = {null};
-
         for (Bil bil : availibleCars) {
             double carPrice = getCaluclatedPriceForCar(bil.getBilKategori(), pickupDate, returnDate, chosenPickUpLocation, chosenReturnLocation);
             JButton button = new JButton(bil.toString() + " - Pris: " + carPrice + "kr");
@@ -116,11 +98,8 @@ public class BilReservasjonApp {
             });
             dialog.add(button);
         }
-
         dialog.setVisible(true);
-      
         return chosenCar[0];
-		
 	}
 	
 	
@@ -128,14 +107,12 @@ public class BilReservasjonApp {
 	    JPanel panel = new JPanel();
 	    BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
 	    panel.setLayout(boxLayout);
-
 	    JTextField forNavnField = new JTextField(20);
 	    JTextField etterNavnField = new JTextField(20);
 	    JTextField gateadresseField = new JTextField(20);
 	    JTextField postNmrField = new JTextField(20);
 	    JTextField poststedField = new JTextField(20);
 	    JTextField tlfNmrField = new JTextField(20);
-
 	    panel.add(new JLabel("Fornavn:"));
 	    panel.add(forNavnField);
 	    panel.add(new JLabel("Etternavn:"));
@@ -148,10 +125,8 @@ public class BilReservasjonApp {
 	    panel.add(poststedField);
 	    panel.add(new JLabel("Telefonnummer:"));
 	    panel.add(tlfNmrField);
-
 	    int option = JOptionPane.showConfirmDialog(null, panel, "Vennligst legg inn kundedata for å bekrefte reservasjon.", 
 	            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
 	    if (option == JOptionPane.OK_OPTION) {
 	        String fornavn = forNavnField.getText();
 	        String etternavn = etterNavnField.getText();
@@ -163,7 +138,6 @@ public class BilReservasjonApp {
 	        Kunde kunde = new Kunde(fornavn, etternavn, adresse, tlfNmr);
 	        return kunde;
 	    }
-
 	    return null; 
 	}
 		
@@ -177,12 +151,10 @@ public class BilReservasjonApp {
 	    long days = ChronoUnit.DAYS.between(henteDato, returDato);
 	    int dagspris = PrisKonfigurasjon.getDagspris(bilkategori);
 	    int totalPris = (int) (days * dagspris);
-	    
 	    if (!henteLokasjon.equals(returLokasjon)) {
 	        int gebyr = PrisKonfigurasjon.getGebyr(henteLokasjon, returLokasjon);
 	        totalPris += gebyr;
 	    }
-	    
 	    return totalPris;
 	}
     
@@ -196,9 +168,7 @@ public class BilReservasjonApp {
 			LocalDateTime datoHent, 
 			LocalDateTime datoRetur
 			) {
-		
 		bil.addReservasjonsDato(datoRetur, datoHent);
-		
 		Reservasjon nyReservasjon = new Reservasjon(
 				pris, 
 				bil, 
@@ -208,13 +178,11 @@ public class BilReservasjonApp {
 				datoHent, 
 				datoRetur
 		);
-		
 		Utleiekontor correspondingUtleiekontor = BilutleieSelskap.getUtleiekontorer().stream().filter(kontor -> kontor.getLokasjon() == kontorHent).toList().get(0);
-		
 		correspondingUtleiekontor.addReservasjon(nyReservasjon);
-		
 		System.out.println(nyReservasjon);
 		System.out.println(bil);
 		System.out.println(correspondingUtleiekontor);
+		BilutleieSelskap.startApp();
 	}
 }
