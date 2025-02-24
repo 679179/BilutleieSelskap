@@ -1,6 +1,5 @@
 package bilutleieapp.apps;
-import javax.swing.JOptionPane;
-
+// import javax.swing.JOptionPane;
 import bilutleieapp.enums.BrukerRolle;
 import bilutleieapp.helpers.UIHelper;
 
@@ -47,11 +46,11 @@ public class AppManager {
 	}
 
 	public void startApp() {
-		redirectToApp();
+		redirectToAppSelection();
     }
 	
-	public void redirectToApp() {
-		BrukerRolle selectedRole = UIHelper.chooseUserActionFromEnumOptions("Velg brukersystem", "Bruker Valg", BrukerRolle.values());
+	public void redirectToAppSelection() {
+		BrukerRolle selectedRole = UIHelper.getValueFromDropdownEnums("Velg brukersystem", "Bruker Valg", BrukerRolle.values());
         if (selectedRole == null) return;
         switch (selectedRole) {
             case KUNDE -> bilReservasjonApp.start();

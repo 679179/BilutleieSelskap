@@ -1,5 +1,6 @@
 package bilutleieapp.main;
 import java.time.LocalDateTime;
+import bilutleieapp.services.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
@@ -102,8 +103,7 @@ public class DummyDataGenerator {
             
             // Opprett reservasjonen
             Reservasjon reservasjon = new Reservasjon(totalPris, bil, kunde, kontorHentLokasjon, kontorReturLokasjon, datoHent, datoRetur);
-            System.out.println(reservasjon);
-
+  
             // Legg til reservasjonen
             kontorHent.addReservasjon(reservasjon);
         }

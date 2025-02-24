@@ -1,18 +1,23 @@
 package bilutleieapp.services;
-import java.awt.FlowLayout;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JOptionPane;
+import bilutleieapp.entities.Adresse;
+import bilutleieapp.entities.Bil;
+import bilutleieapp.entities.Kunde;
+import bilutleieapp.entities.Reservasjon;
+import bilutleieapp.entities.Utleiekontor;
 import bilutleieapp.enums.BilKategori;
 import bilutleieapp.helpers.UIHelper;
 import bilutleieapp.repository.Repository;
@@ -21,7 +26,6 @@ public class BilutleieService {
 	
     private static BilutleieService instance;
     private Repository repository;
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final Map<BilKategori, Integer> dagspriser = new HashMap<>();
     private static final Map<Set<String>, Integer> gebyrer = new HashMap<>();
 
@@ -58,37 +62,14 @@ public class BilutleieService {
     }
     
     public String getExistingLocationFromUser() {
-        String[] options = repository.getLokasjoner().toArray(new String[0]); 
-    	return UIHelper.chooseUserActionFromOptions("Velg tilhørende lokasjon for ditt kontor", "Lokasjon Valg", options);
+        return repository.getExistingLocationFromUser();
     }
     
 	public String getLocationInputFromUser(String promptMsg) {
-		
-        final JDialog dialog = new JDialog((Frame) null, promptMsg, true);
-        dialog.setLayout(new FlowLayout());
-        dialog.setSize(400, 200);
-
-        final String[] selectedLocation = {null};
-       
-
-        for (String lokasjon : repository.getLokasjoner()) {
-            JButton button = new JButton(lokasjon);
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    selectedLocation[0] = lokasjon;
-                    dialog.dispose();
-                }
-            });
-            dialog.add(button);
-        }
-
-        dialog.setVisible(true);
-        return selectedLocation[0];
+		return UIHelper.getUserOptionFromButtonClicked(promptMsg, repository.getLokasjoner());        
 	}
 	
-    public Map<String, Object> getParamsForReservationSearch() {
-    	
+    public Map<String, Object> getParamsForAvailibleCarsSearch() {
         LocalDateTime pickupDate = null;
         pickupDate = UIHelper.getDateFromUser("Vennligst oppgi dato for hent");
         LocalDateTime returnDate = null;
@@ -98,15 +79,10 @@ public class BilutleieService {
             UIHelper.showError("Returdato må være etter hentedato. Begge felt må fylles ut");
             return null;
         }
-        
-        
         String chosenPickUpLocation = getLocationInputFromUser("Velg utleiekontor for henting av bil");
         String chosenReturnLocation = getLocationInputFromUser("Velg utleiekontor for retur av bil");
-        
-        
-        
-        
         Map<String, Object> searchParams = new HashMap<>();
+            
         searchParams.put("pickupDate", pickupDate);
         searchParams.put("returnDate", returnDate);
         searchParams.put("chosenPickUpLocation", chosenPickUpLocation);
@@ -114,6 +90,110 @@ public class BilutleieService {
         return searchParams;
     }
     
+	public Bil getCarPickedFromAvailibleCars(LocalDateTime pickupDate,LocalDateTime returnDate, String chosenPickUpLocation, String chosenReturnLocation) {	
+		
+		List<Bil> availibleCars = repository.getAllUtleiekontorer()
+				.stream()
+				.filter(kontor -> kontor.getLokasjon() == chosenPickUpLocation)
+				.toList()
+				.get(0)
+				.getBiler()
+				.stream()
+				.filter(bil -> bil.erLedigForDatoer(pickupDate, returnDate))
+				.toList();
+		
+		if (availibleCars.size() == 0) {
+			UIHelper.showMessage("Ingen tilgjengelige biler for valgt periode ved " + chosenPickUpLocation);
+		    return null;
+		}
+				
+	    final JDialog dialog = new JDialog(
+	    		(Frame) null, 
+	    		"Vi har følgende biler tilgjengelig ved " + chosenPickUpLocation + "for valgt periode. Vennligst klikk på den du vil reservere", 
+	    		true);
+	    
+	    dialog.setLayout(new GridLayout(0, 1));
+	    dialog.setSize(600, 400);
+	    
+	    final Bil[] chosenCar = {null};
+	    
+	    for (Bil bil : availibleCars) {
+	        double carPrice = getCaluclatedPriceForCarCategory(bil.getBilKategori(), pickupDate, returnDate, chosenPickUpLocation, chosenReturnLocation);
+	        JButton button = new JButton(bil.toString() + " - Pris: " + carPrice + "kr");
+	        button.addActionListener(new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                chosenCar[0] = bil;
+	                dialog.dispose();
+	            }
+	        });
+	        dialog.add(button);
+	    }
+	    
+	    dialog.setVisible(true);
+	    return chosenCar[0];
+	     
+	}
+	
+    public Kunde getCustomerInfoForReservation() {
+        List<String> fieldLabels = Arrays.asList(
+            "Fornavn:", "Etternavn:", "Gateadresse:", "Postnummer:", "Poststed:", "Telefonnummer:"
+        );
+        Map<String, String> userInputs = UIHelper.getUserInputForFields(fieldLabels);
+        if(userInputs == null) return null;
+        String fornavn = userInputs.get("Fornavn:");
+        String etternavn = userInputs.get("Etternavn:");
+        String gateadresse = userInputs.get("Gateadresse:");
+        String postnummer = userInputs.get("Postnummer:");
+        String poststed = userInputs.get("Poststed:");
+        String tlfNmr = userInputs.get("Telefonnummer:");
+        Adresse adresse = new Adresse(gateadresse, postnummer, poststed);
+        Kunde kunde = new Kunde(fornavn, etternavn, adresse, tlfNmr);
+        return kunde;
+
+    }
+	
+	public double getCaluclatedPriceForCarCategory(
+			BilKategori bilkategori, 
+			LocalDateTime henteDato, 
+			LocalDateTime returDato, 
+			String henteLokasjon, 
+			String returLokasjon) 
+		{
+	    long days = ChronoUnit.DAYS.between(henteDato, returDato);
+	    int dagspris = getDagspris(bilkategori);
+	    int totalPris = (int) (days * dagspris);
+	    if (!henteLokasjon.equals(returLokasjon)) {
+	        int gebyr = getGebyr(henteLokasjon, returLokasjon);
+	        totalPris += gebyr;
+	    }
+	    return totalPris;
+	}
+	
+	public void addReservation(
+			double pris, 
+			Bil bil, 
+			Kunde kunde, 
+			String kontorHent, 
+			String kontorRetur,
+			LocalDateTime datoHent, 
+			LocalDateTime datoRetur
+			) {
+		bil.addReservasjonsDato(datoRetur, datoHent);
+		Reservasjon nyReservasjon = new Reservasjon(
+				pris, 
+				bil, 
+				kunde, 
+				kontorHent, 
+				kontorRetur,
+				datoHent, 
+				datoRetur
+		);
+		Utleiekontor correspondingUtleiekontor = repository.getAllUtleiekontorer().stream().filter(kontor -> kontor.getLokasjon() == kontorHent).toList().get(0);
+		correspondingUtleiekontor.addReservasjon(nyReservasjon);
+		UIHelper.showMessage("Reservasjon på \" + bil.getMerke() + \" med reg.nr \" + bil.getRegistreringsNr() +  \" er registrert!");
+	}
+	
     private Set<String> createLokasjonPair(String lok1, String lok2) {
         Set<String> lokasjonPair = new TreeSet<>();
         lokasjonPair.add(lok1);

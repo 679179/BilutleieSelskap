@@ -1,10 +1,11 @@
 package bilutleieapp.repository;
 import java.util.ArrayList;
 import java.util.List;
-
+import bilutleieapp.entities.Reservasjon;
 import bilutleieapp.entities.BilutleieSelskap;
 import bilutleieapp.entities.Kunde;
 import bilutleieapp.entities.Utleiekontor;
+import bilutleieapp.helpers.UIHelper;
 
 public class Repository {
 
@@ -40,7 +41,7 @@ public class Repository {
     
     // Utleiekontor metoder
     public List<Utleiekontor> getAllUtleiekontorer() {
-        return utleiekontorer; //
+        return utleiekontorer; 
     }
 
 
@@ -50,6 +51,10 @@ public class Repository {
 
     public void removeUtleiekontor(Utleiekontor kontor) {
         utleiekontorer.remove(kontor);
+    }
+    
+    public List<Utleiekontor> getUtleiekontorer() {
+    	return utleiekontorer;
     }
 
     // Kunde metoder
@@ -88,6 +93,19 @@ public class Repository {
 		        .findFirst()
 		        .orElseThrow(() -> new RuntimeException("Utleiekontor med lokasjon " + lokasjon + " ikke funnet"));
 		return kontor;
+    }
+    
+    public String getExistingLocationFromUser() {
+        String[] options = lokasjoner.toArray(new String[0]); 
+    	return UIHelper.getValueFromDropdown("Velg tilhørende lokasjon for ditt kontor", "Lokasjon Valg", options);
+    }
+    
+    public Reservasjon findReservationAtKontorByLastnameAndRegNr(Utleiekontor kontor, String etternavn, String regNr) {
+		return kontor.getReservasjoner().stream()
+	        .filter(res -> res.getBil().getRegistreringsNr().toUpperCase().equals(regNr.toUpperCase()) 
+	                && res.getKunde().getEtternavn().toUpperCase().equals(etternavn.toUpperCase()))
+	        .findFirst()
+	        .orElseThrow(() -> new RuntimeException("Reservasjon ikke funnet for bil med registreringsnummer " + regNr + " og etternavn " + etternavn));
     }
 }
 
