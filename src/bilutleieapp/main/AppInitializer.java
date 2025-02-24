@@ -1,12 +1,10 @@
 package bilutleieapp.main;
-import bilutleieapp.services.Service;
 import bilutleieapp.apps.*;
 import bilutleieapp.entities.*;
 import bilutleieapp.repository.Repository;
 import bilutleieapp.services.BilutleieService;
 import bilutleieapp.services.KonsulentService;
 import bilutleieapp.services.AdminService;
-import java.util.List;
 
 public class AppInitializer {
     

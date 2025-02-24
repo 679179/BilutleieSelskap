@@ -1,6 +1,5 @@
 package bilutleieapp.main;
 import java.time.LocalDateTime;
-import bilutleieapp.services.Service;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;

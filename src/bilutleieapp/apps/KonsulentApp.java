@@ -1,14 +1,7 @@
 package bilutleieapp.apps;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import bilutleieapp.entities.Bil;
-import bilutleieapp.entities.Reservasjon;
-import bilutleieapp.entities.Utleiekontor;
 import bilutleieapp.enums.KonsulentHandling;
 import bilutleieapp.helpers.UIHelper;
 import bilutleieapp.services.KonsulentService;
-import java.time.LocalDateTime;
-
 
 public class KonsulentApp implements App {
 	

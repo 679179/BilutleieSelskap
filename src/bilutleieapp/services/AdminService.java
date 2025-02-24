@@ -2,10 +2,6 @@ package bilutleieapp.services;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-
 import bilutleieapp.entities.Adresse;
 import bilutleieapp.entities.Bil;
 import bilutleieapp.entities.Utleiekontor;
@@ -65,7 +61,7 @@ public class AdminService implements Service {
         String modell = userInputs.get("Modell:");
         String regNr = userInputs.get("Regnr:");
         int kmStand = Integer.parseInt(userInputs.get("Km stand:"));
-        Bil bil = new Bil(regNr, kontor, merke, merke, farge, bilKategori, kmStand);
+        Bil bil = new Bil(regNr, kontor, merke, modell, farge, bilKategori, kmStand);
         kontor.addBil(bil);
         UIHelper.showMessage(merke + " er registert ved " + lokasjon + "!");
     }
