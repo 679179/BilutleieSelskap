@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"bilutleieapp.apps"},{"l":"bilutleieapp.entities"},{"l":"bilutleieapp.enums"},{"l":"bilutleieapp.helpers"},{"l":"bilutleieapp.main"},{"l":"bilutleieapp.repository"},{"l":"bilutleieapp.services"}];updateSearchResults();
